@@ -1,1 +1,1 @@
-graphic.o: graphic.c
+graphic.o: graphic.c serial.h pmio.h

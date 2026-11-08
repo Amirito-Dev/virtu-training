@@ -11,8 +11,10 @@
 #include <err.h>
 #include <stdbool.h>
 #include "serial.h"
+#include "graphic.h"
 
 void vmm_init(vmm_t *vmm, uint32_t ram_size, char* guest_path){
+
     if (ram_size < 512 || ram_size > (4*1024*1024)) err(1, "la RAM doit être entre 512KB et 4MO");
 
     printf("vmm RAM amount : %d bytes\n", ram_size);
@@ -110,6 +112,8 @@ void vmm_init(vmm_t *vmm, uint32_t ram_size, char* guest_path){
     if (ioctl(vcpufd, KVM_SET_REGS, &regs) < 0) err(1, "Error: KVM_SET_REGS:");
 
     init_serial(&vmm->serial);
+    init_graphic(&vmm->graphic);
+
 }
 
 void vmm_run(vmm_t *vmm){
@@ -123,6 +127,8 @@ void vmm_run(vmm_t *vmm){
                 handle_serial_pmio(vmm);
             break; // This VMexit should be handled here...
             case KVM_EXIT_MMIO: // Encountered a MMIO VMexit
+                //printf("MMIO VMExit\n");
+                handle_graphic_mmio(vmm);
             break; // This VMexit should be handled here...
             case KVM_EXIT_HLT: // "halt" CPU instruction
                 printf("Encounterd HLT instruction\n");

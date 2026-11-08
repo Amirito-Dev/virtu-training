@@ -4,6 +4,7 @@
 #include "x86.h"
 #include "pmio.h"
 #include "serial.h"
+#include "graphic.h"
 
 void guest_main() {
     idt_init();  // Initialize interrupt subsystem
@@ -16,4 +17,6 @@ void guest_main() {
     write_serial('O');
     write_serial('U');
     write_serial('I');
+
+    init_graphic(5);
 }
