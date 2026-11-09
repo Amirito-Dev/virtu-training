@@ -19,4 +19,5 @@ void guest_main() {
     write_serial('I');
 
     init_graphic(5);
+    fill_screen(255, 0, 0);
 }
