@@ -13,6 +13,7 @@
 #include "serial.h"
 #include "graphic.h"
 #include "disk.h"
+#include "keyboard.h"
 
 void vmm_init(vmm_t *vmm, uint32_t ram_size, char* guest_path, char* disk_path){
 
@@ -122,6 +123,8 @@ void vmm_init(vmm_t *vmm, uint32_t ram_size, char* guest_path, char* disk_path){
     fstat(fd, &d_stat);
 
     init_disk(&vmm->disk, fd, d_stat.st_size);
+
+    init_keyboard(&vmm->keyboard);
 }
 
 void vmm_run(vmm_t *vmm){
@@ -134,6 +137,7 @@ void vmm_run(vmm_t *vmm){
                 //printf("PMIO VMEXIT\n");
                 handle_serial_pmio(vmm);
                 handle_disk_io(vmm);
+                handle_keyboard_io(vmm);
             break; // This VMexit should be handled here...
             case KVM_EXIT_MMIO: // Encountered a MMIO VMexit
                 //printf("MMIO VMExit\n");

@@ -50,6 +50,10 @@ typedef struct{
 } disk_t;
 
 typedef struct{
+    uint32_t currentKey;
+} keyboard_t;
+
+typedef struct{
     int kvm_fd;
     int vm_fd;
     int vcpu_fd;
@@ -58,5 +62,6 @@ typedef struct{
     serial_t serial;
     graphic_t graphic;
     disk_t disk;
+    keyboard_t keyboard;
 } vmm_t;
 

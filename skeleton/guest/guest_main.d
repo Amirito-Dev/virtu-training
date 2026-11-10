@@ -1,2 +1,2 @@
 guest_main.o: guest_main.c idt.h utils.h x86.h pmio.h serial.h graphic.h \
- disk.h
+ disk.h keyboard.h

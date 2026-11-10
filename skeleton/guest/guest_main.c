@@ -6,6 +6,7 @@
 #include "serial.h"
 #include "graphic.h"
 #include "disk.h"
+#include "keyboard.h"
 
 void guest_main() {
     idt_init();  // Initialize interrupt subsystem
@@ -29,4 +30,6 @@ void guest_main() {
     }
 
     write_sector(0, sector_data);
+    // Attendre la touche Q
+    read_key(113);
 }

@@ -51,8 +51,16 @@ int main(int argc, char* argv[]){
         fprintf(stderr, "Graphics initialization failed!\n");
         return EXIT_FAILURE;
     }
-
-    while (gfx_keypressed() != SDLK_ESCAPE) {
+    
+    while (1) {
+        int key = gfx_keypressed();
+        if(key == SDLK_ESCAPE){
+            break;
+        }
+        if(key != 0){
+            vmm.keyboard.currentKey = key;
+            printf("Key pressed : %d\n", key);
+        }
         render_framebuffer(ctxt, &vmm);
         gfx_background_update(ctxt);
         gfx_present(ctxt);
