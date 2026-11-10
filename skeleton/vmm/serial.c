@@ -11,6 +11,11 @@ void init_serial(serial_t *serial){
 }
 
 void handle_serial_pmio(vmm_t *vmm){
+    // Si le port n'appartient pas au port série COM1 (0x3F8 à 0x3FD)
+    if (vmm->run->io.port < 0x3F8 || vmm->run->io.port > 0x3FD) {
+        return;
+    }
+    
     //printf("SERIAL PMIO\n");
     uint8_t *addr = (uint8_t *)vmm->run + vmm->run->io.data_offset;
     uint32_t value;

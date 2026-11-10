@@ -40,6 +40,16 @@ typedef struct{
 } graphic_t;
 
 typedef struct{
+    periph_state_enum state;
+    uint8_t seq_idx;
+    uint32_t lba;
+    uint8_t buffer[512];
+    int byte_already_written;
+    int fd;
+    int size;
+} disk_t;
+
+typedef struct{
     int kvm_fd;
     int vm_fd;
     int vcpu_fd;
@@ -47,5 +57,6 @@ typedef struct{
     struct kvm_run *run;
     serial_t serial;
     graphic_t graphic;
+    disk_t disk;
 } vmm_t;
 

@@ -30,14 +30,14 @@ void handle_graphic_mmio(vmm_t *vmm){
         if(vmm->graphic.seq_idx == 1){
             step_ok = true;
         }else if(vmm->graphic.seq_idx == 2 && value >= 1 && value <= 5){
-            printf("MODE : %d\n", value);
+            //printf("MODE : %d\n", value);
             vmm->graphic.mode = value;
             vmm->graphic.res = resolutions[value-1];
             printf("width : %d height : %d\n", vmm->graphic.res.width, vmm->graphic.res.height);
             step_ok = true;
         }
 
-        printf("MMIO guest write: addr=0x%llx value=0x%x len=%d\n", vmm->run->mmio.phys_addr, value, bytes_written);
+        //printf("MMIO guest write: addr=0x%llx value=0x%x len=%d\n", vmm->run->mmio.phys_addr, value, bytes_written);
 
     }else if(!vmm->run->mmio.is_write){
         if(vmm->graphic.seq_idx == 0){
@@ -55,7 +55,7 @@ void handle_graphic_mmio(vmm_t *vmm){
             int rest = FOUR_KB - (framebuffer_size % FOUR_KB);
             framebuffer_size += rest;
 
-            printf("Framebuffer size : %d | reste : %d\n", framebuffer_size, rest);
+            //printf("Framebuffer size : %d | reste : %d\n", framebuffer_size, rest);
 
             uint8_t *framebuffer_ptr = mmap(NULL, framebuffer_size, PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1, 0);
             if (framebuffer_ptr == MAP_FAILED) err(1, "Error: failed allocating guest memory: ");
@@ -76,7 +76,7 @@ void handle_graphic_mmio(vmm_t *vmm){
 
 
     if(step_ok){
-        printf("STEP %d OK\n", vmm->graphic.seq_idx);
+        //printf("STEP %d OK\n", vmm->graphic.seq_idx);
         vmm->graphic.seq_idx += 1;
         if(vmm->graphic.seq_idx == 4){
             printf("Périphérique graphique initialisé.\n");
@@ -84,7 +84,7 @@ void handle_graphic_mmio(vmm_t *vmm){
             sem_post(&vmm->graphic.init_sem);
         }
     }else{
-        printf("STEP %d NOT OK\n", vmm->graphic.seq_idx);
+        //printf("STEP %d NOT OK\n", vmm->graphic.seq_idx);
         init_graphic(&vmm->graphic);
     }
 

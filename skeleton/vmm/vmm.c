@@ -12,8 +12,9 @@
 #include <stdbool.h>
 #include "serial.h"
 #include "graphic.h"
+#include "disk.h"
 
-void vmm_init(vmm_t *vmm, uint32_t ram_size, char* guest_path){
+void vmm_init(vmm_t *vmm, uint32_t ram_size, char* guest_path, char* disk_path){
 
     if (ram_size < 512 || ram_size > (4*1024*1024)) err(1, "la RAM doit être entre 512KB et 4MO");
 
@@ -114,6 +115,13 @@ void vmm_init(vmm_t *vmm, uint32_t ram_size, char* guest_path){
     init_serial(&vmm->serial);
     init_graphic(&vmm->graphic);
 
+    int fd = open(disk_path, O_RDWR);
+
+    struct stat d_stat;
+
+    fstat(fd, &d_stat);
+
+    init_disk(&vmm->disk, fd, d_stat.st_size);
 }
 
 void vmm_run(vmm_t *vmm){
@@ -125,6 +133,7 @@ void vmm_run(vmm_t *vmm){
             case KVM_EXIT_IO: // Encountered a PMIO VMexit
                 //printf("PMIO VMEXIT\n");
                 handle_serial_pmio(vmm);
+                handle_disk_io(vmm);
             break; // This VMexit should be handled here...
             case KVM_EXIT_MMIO: // Encountered a MMIO VMexit
                 //printf("MMIO VMExit\n");

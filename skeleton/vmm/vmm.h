@@ -10,5 +10,5 @@
 #define STACK_START 8*1024*1024
 #define STACK_SIZE 2*1024*1024
 
-void vmm_init(vmm_t *vmm, uint32_t ram_size, char* guest_path);
+void vmm_init(vmm_t *vmm, uint32_t ram_size, char* guest_path, char* disk_path);
 void vmm_run(vmm_t *vmm);
